@@ -1,7 +1,21 @@
 # oauth-assignment
 
 ## Running
+
+### Docker
+`docker run -it $(docker build -q .)`
+
+### Maven
 `mvn spring-boot:run` or `./mvnw spring-boot:run`
+
+## Usage
+1. Using the following url in a browser/client: `http://localhost:10000/authorize?response_type=id%20token
+&client_id=00000000-0000-0000-0000-000000000000&redirect_uri=https%3A%2F%2Fvodafoneziggo.nl%2F&scope=openid
+&state=asd&nonce=asd`
+2. Retrieve the access_token and id_token from the redirected URL
+3. Call `http://localhost:8080/test/ping` with the access token prefixed "Bearer" in the Authorization header:
+`Authorization: Bearer ey...` should return a succesful response
+4. The access_token and id_token can be inserted into any JWT reader to see the contents (e.g. https://jwt.io)
 
 ## Design considerations
 1. Would normally use an OAuth library in some way but that kind of defeats the purpose of this assignment. 
