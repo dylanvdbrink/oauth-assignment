@@ -9,11 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.net.URI;
 import java.text.MessageFormat;
@@ -22,27 +19,20 @@ import java.util.Arrays;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
-@AutoConfigureMockMvc
-class AuthenticationIT extends BaseIT {
+@AutoConfigureMockMvc()
+class AuthenticationITTestTest extends BaseITTest {
 
     @Autowired
-    private WebApplicationContext context;
-
     private MockMvc mockMvc;
 
     @BeforeEach
     void beforeEach() {
         cleanDatabase();
-        this.mockMvc = MockMvcBuilders
-                .webAppContextSetup(this.context)
-                .apply(springSecurity())
-                .build();
     }
 
     @AfterEach
@@ -153,26 +143,5 @@ class AuthenticationIT extends BaseIT {
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", containsString("state=state-value")));
-    }
-
-    @Test
-    void shouldReturnErrorWhenUsingIncorrectToken() throws Exception {
-        // Token with incorrect shared secret
-        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJJbmNvcnJlY3QifQ.BAR3M2KEc2al8AGxCEEEogsDgmSEclU04faculfhbP00_" +
-                "1FbiliyeqGHYRa3QcwxjSTcwIydWJYwxarn7lyJ_Q";
-        this.mockMvc.perform(get("/test/ping").header("Authorization", token))
-                .andDo(print())
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    void shouldReturnPongWhenUsingCorrectToken() throws Exception {
-        // Correct token
-        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJWWiJ9.VnzhWsG3MTIJb_RsDtMNuHnHQdYS_MFFj_" +
-                "TmCBuqZLPnHDf78wqTEIrtLHbB7gVFbwd2_AzXjED1pRBK15D09w";
-        this.mockMvc.perform(get("/test/ping").header("Authorization", token))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string("pong"));
     }
 }

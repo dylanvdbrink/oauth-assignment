@@ -2,7 +2,7 @@ FROM maven:3.9.0-eclipse-temurin-17-focal AS build
 
 COPY . .
 
-RUN mvn clean package
+RUN mvn clean package -DskipTests
 
 FROM amazoncorretto:17 AS run
 

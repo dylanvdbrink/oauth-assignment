@@ -12,8 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Set;
 
 @SpringBootTest
-public class BaseIT {
-    private static final Logger logger = LoggerFactory.getLogger(BaseIT.class);
+public class BaseITTest {
+    private static final Logger logger = LoggerFactory.getLogger(BaseITTest.class);
 
     @Autowired
     protected ClientRepository clientRepository;
@@ -24,7 +24,7 @@ public class BaseIT {
     }
 
     protected Client createClient(String name) {
-        Client client = new Client("ClientA");
+        Client client = new Client(name);
         RedirectURI redirectURI = new RedirectURI("https://vodafoneziggo.nl", client);
         ResponseType responseType = new ResponseType(ResponseType.ID_TOKEN, client);
         client.setAllowedResponseTypes(Set.of(responseType));

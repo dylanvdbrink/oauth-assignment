@@ -6,6 +6,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import nl.dylanvdbrink.oauthassignment.service.AuthorizationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +21,7 @@ import java.util.List;
 
 @Component
 public class JWTTokenFilter extends OncePerRequestFilter {
+    private static final Logger logger = LoggerFactory.getLogger(JWTTokenFilter.class);
     private final AuthorizationService authorizationService;
 
     public JWTTokenFilter(AuthorizationService authorizationService) {
@@ -29,6 +32,7 @@ public class JWTTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String headerValue = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (!StringUtils.hasText(headerValue) || !headerValue.startsWith("Bearer ")) {
+            logger.debug("Request did not contain a Authorization header or a Bearer prefixed value");
             filterChain.doFilter(request, response);
             return;
         }
@@ -38,6 +42,7 @@ public class JWTTokenFilter extends OncePerRequestFilter {
         try {
             decoded = authorizationService.verifyToken(token);
         } catch (AuthenticationException e) {
+            logger.warn("Could not decode token");
             response.sendError(401, e.getMessage());
             return;
         }
@@ -48,5 +53,4 @@ public class JWTTokenFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         filterChain.doFilter(request, response);
     }
-
 }

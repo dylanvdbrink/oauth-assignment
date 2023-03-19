@@ -8,6 +8,9 @@
 ### Maven
 `mvn spring-boot:run` or `./mvnw spring-boot:run`
 
+### Tests
+`mvn clean test`
+
 ## Usage
 1. Using the following url in a browser/client: `http://localhost:10000/authorize?response_type=id%20token
 &client_id=00000000-0000-0000-0000-000000000000&redirect_uri=https%3A%2F%2Fvodafoneziggo.nl%2F&scope=openid
@@ -29,7 +32,7 @@ extra dependency was worth it.
 Spring Framework which will result in faster and arguably better unit tests.
 6. Used JUnit and the Spring Boot test framework as I didn't have the time to figure out why my Spock tests weren't 
 working.
-7. Return the same JWT for the access and id tokens. In a real world scenarion this 
+7. Return the same JWT for the access and id tokens. In a real world scenarion this.
 
 ## Notes
 - OpenID spec URL should be "https://openid.net/specs/openid-connect-core-1_0.html" (.htm**l**)
@@ -38,3 +41,5 @@ to be quite different from the application source code and the switching of (alt
 inefficient.
 - Wasn't sure wat was meant by "Implement authentication by the server and require a session before responding with 
 the final redirect containing tokens."
+- There is a bug where if you request a protected endpoint without a token, it does "block" it but still returns a 200. 
+Couldn't figure out why. 
