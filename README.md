@@ -3,10 +3,10 @@
 ## Running
 
 ### Docker
-`docker run -it $(docker build -q .)`
+`docker run -d -p 10000:8080 $(docker build -q .)` will expose the service locally on port 10000
 
 ### Maven
-`mvn spring-boot:run` or `./mvnw spring-boot:run`
+`mvn spring-boot:run` or `./mvnw spring-boot:run` will expose the service locally on port 8080
 
 ### Tests
 `mvn clean test`
