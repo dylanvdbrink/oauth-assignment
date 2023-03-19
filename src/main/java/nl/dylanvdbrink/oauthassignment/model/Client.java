@@ -33,6 +33,11 @@ public class Client {
         this.name = name;
     }
 
+    public Client(String name, UUID clientId) {
+        this.clientId = clientId;
+        this.name = name;
+    }
+
     public long getId() {
         return id;
     }
