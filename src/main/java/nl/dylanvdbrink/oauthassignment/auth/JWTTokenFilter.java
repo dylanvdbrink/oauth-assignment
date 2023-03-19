@@ -37,8 +37,8 @@ public class JWTTokenFilter extends OncePerRequestFilter {
         DecodedJWT decoded;
         try {
             decoded = authorizationService.verifyToken(token);
-        } catch (IOException e) {
-            filterChain.doFilter(request, response);
+        } catch (AuthenticationException e) {
+            response.sendError(401, e.getMessage());
             return;
         }
 

@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 @Entity
 public class ResponseType {
 
+    public static final String ID_TOKEN = "id token";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

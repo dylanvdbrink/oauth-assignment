@@ -1,11 +1,13 @@
 package nl.dylanvdbrink.oauthassignment.auth;
 
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -14,8 +16,11 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class WebSecurityConfig {
     private final JWTTokenFilter jwtTokenFilter;
+    private final AuthenticationEntryPoint authenticationEntryPoint;
 
-    public WebSecurityConfig(JWTTokenFilter jwtTokenFilter) {
+    public WebSecurityConfig(@Qualifier("DelegatedAuthenticationEntrypoint") AuthenticationEntryPoint authenticationEntryPoint,
+                             JWTTokenFilter jwtTokenFilter) {
+        this.authenticationEntryPoint = authenticationEntryPoint;
         this.jwtTokenFilter = jwtTokenFilter;
     }
 
@@ -30,12 +35,7 @@ public class WebSecurityConfig {
 
         http = http
                 .exceptionHandling()
-                .authenticationEntryPoint(
-                        (request, response, ex) -> response.sendError(
-                                HttpServletResponse.SC_UNAUTHORIZED,
-                                ex.getMessage()
-                        )
-                )
+                .authenticationEntryPoint(authenticationEntryPoint)
                 .and();
 
         http

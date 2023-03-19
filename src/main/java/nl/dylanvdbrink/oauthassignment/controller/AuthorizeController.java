@@ -22,19 +22,19 @@ public class AuthorizeController {
 
     @GetMapping("")
     public ResponseEntity<Void> authorize(@RequestParam(name = "response_type") @NotBlank String responseType,
-                                    @RequestParam(name = "client_id") @NotBlank String clientId,
-                                    @RequestParam(name = "redirect_uri") @NotBlank String redirectUri,
-                                    @NotBlank String scope,
-                                    @NotBlank String state) throws IOException {
+                                          @RequestParam(name = "client_id") @NotBlank String clientId,
+                                          @RequestParam(name = "redirect_uri") @NotBlank String redirectUri,
+                                          @RequestParam(name = "nonce") @NotBlank String nonce,
+                                          String scope,
+                                          String state) {
 
-        AuthorizationResponse response = authorizationService.authorize(responseType, clientId, redirectUri, scope, state);
-        String location = MessageFormat.format("{0}#access_token={1}&id_token={2}&token_type={3}&expires_in={4}&state={5}",
-                redirectUri, response.accessToken(), response.idToken(), response.tokenType(), Integer.toString(response.expiresIn()), response.state());
+        AuthorizationResponse response = authorizationService.authorize(responseType, clientId, redirectUri, nonce, scope, state);
+        String location = MessageFormat.format("{0}#id_token={1}&token_type={2}&access_token={3}&state={4}",
+                redirectUri, response.idToken(), response.tokenType(), response.accessToken(), response.state());
 
         return ResponseEntity
                 .status(HttpStatus.FOUND)
                 .header(HttpHeaders.LOCATION, location)
                 .build();
     }
-
 }

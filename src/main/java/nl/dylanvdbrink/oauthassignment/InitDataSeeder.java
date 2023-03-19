@@ -33,13 +33,13 @@ public class InitDataSeeder {
         Client clientC = new Client("Client C");
 
         clientA.setRedirectURIs(Set.of(new RedirectURI("https://vodafoneziggo.nl/", clientA), new RedirectURI("https://ziggo.nl/", clientA)));
-        clientA.setAllowedResponseTypes(Set.of(new ResponseType("id token", clientA)));
+        clientA.setAllowedResponseTypes(Set.of(new ResponseType(ResponseType.ID_TOKEN, clientA)));
 
         clientB.setRedirectURIs(Set.of(new RedirectURI("https://ziggo.nl/", clientB)));
-        clientB.setAllowedResponseTypes(Set.of(new ResponseType("id token", clientB)));
+        clientB.setAllowedResponseTypes(Set.of(new ResponseType(ResponseType.ID_TOKEN, clientB)));
 
         clientC.setRedirectURIs(Set.of(new RedirectURI("https://vodafone.nl/", clientC)));
-        clientC.setAllowedResponseTypes(Set.of(new ResponseType("id token", clientC)));
+        clientC.setAllowedResponseTypes(Set.of(new ResponseType(ResponseType.ID_TOKEN, clientC)));
 
         clientRepository.save(clientA);
         clientRepository.save(clientB);
